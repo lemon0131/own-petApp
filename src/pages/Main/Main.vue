@@ -1,7 +1,10 @@
 <template>
     <div>
-      <div class="containerTop">
-        <div class="floatTop">
+      <div class="containerTop" ref="containerTop">
+        <div class="topdiv" v-if="isshowTop">
+          <span class="iconfont icon-cha" @click="cancleTop"></span>
+        </div>
+        <div class="floatTop" ref="floatTop">
           <div class="indexContent">
             <div class="topDiv">
               <div class="topTwo">
@@ -94,32 +97,32 @@
         <div class="swiper-wrapper loopWrapper">
           <div class="swiper-slide loopSlide">
             <a href="javascript:;">
-              <!--<img src="./images/slide1.jpg">-->
+              <img src="./images/slide1.jpg">
             </a>
           </div>
           <div class="swiper-slide loopSlide">
             <a href="#">
-              <!--<img src="./images/slide2.jpg">-->
+              <img src="./images/slide2.jpg">
             </a>
           </div>
           <div class="swiper-slide loopSlide">
             <a href="#">
-              <!--<img src="./images/slide3.jpg">-->
+              <img src="./images/slide3.jpg">
             </a>
           </div>
           <div class="swiper-slide loopSlide">
             <a href="#">
-              <!--<img src="./images/slide3.jpg">-->
+              <img src="./images/slide3.jpg">
             </a>
           </div>
           <div class="swiper-slide loopSlide">
             <a href="#">
-              <!--<img src="./images/slide2.jpg">-->
+              <img src="./images/slide2.jpg">
             </a>
           </div>
           <div class="swiper-slide loopSlide">
             <a href="#">
-              <!--<img src="./images/slide1.jpg">-->
+              <img src="./images/slide1.jpg">
             </a>
           </div>
         </div>
@@ -198,8 +201,8 @@
           </div>
         </div>
         <div class="surpriseBottom" >
-          <div class="surpriseContainer swiper-container2">
-          <ul class="surpriseWrapper swiper-wrapper">
+          <div class="surpriseContainer ">
+          <ul class="surpriseWrapper ">
             <li class="swiper-slide">
               <div class="image">
                 <img src="./images/surpriselist.jpg" alt="">
@@ -272,6 +275,25 @@
       </div>
       <div class="allServes">
         <Pageline />
+        <div class="currentServes">
+          <div class="state"></div>
+          <div class="right">
+            <div class="top">
+              <img src="./images/adOne/01 (25).jpg" alt="">
+            </div>
+            <div class="bottom">
+              <img src="./images/adOne/01 (39).jpg" alt="">
+            </div>
+          </div>
+          <div class="right">
+            <div class="top">
+              <img src="./images/adOne/01 (25).jpg" alt="">
+            </div>
+            <div class="bottom">
+              <img src="./images/adOne/01 (39).jpg" alt="">
+            </div>
+          </div>
+        </div>
         <Pageline />
       </div>
       <div class="specialCell">
@@ -290,8 +312,29 @@
         <Pageline />
         <ImageBig/>
       </div>
-      <div class="mengzhua">
-
+      <div class="mengzhuass">
+        <Pageline/>
+        <Imagehaha/>
+        <div class="swiper-container mengzhua">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <a href="javascript:;">
+                <img src="./images/slide1.jpg">
+              </a>
+            </div>
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./images/slide2.jpg">
+              </a>
+            </div>
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./images/slide3.jpg">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
       <div class="mengchong">
         <Imagehaha/>
@@ -314,15 +357,33 @@
   import ImageBig from '../../components/image/imagebig.vue'
   import VideoImg from '../../components/image/video.vue'
   import footerthank from '../../components/image/footerthank.vue'
+  import 'swiper/dist/css/swiper.min.css'
   export default {
+    data(){
+      return{
+        isshowTop:true
+      }
+    },
+    methods:{
+      cancleTop(){
+        this.isshowTop = false;
+        let t=this.$refs.containerTop;
+        let f=this.$refs.floatTop;
+        t.style.height = 86+'px';
+        f.style.top = 0+'px';
+      }
+    },
     mounted(){
       setTimeout(()=>{
         new BScroll('.wapper', {scrollX: true, click: true})
-        new Swiper('.swiper-container',{
-          loop:true,
+        new Swiper('.loopContainer',{
+          loop:true,autoplay:true,
           pagination: {el:'.swiper-pagination', type: 'bullets'}
         })
-        new BScroll('.swiper-container2',{scrollX: true, click: true})
+        new Swiper('.mengzhua',{
+          loop:true,autoplay:true,pagination: {el:'.swiper-pagination', type: 'bullets'}
+        })
+        new BScroll('.surpriseContainer',{scrollX: true, click: true})
       },500)
     },
     components:{
@@ -336,11 +397,11 @@
   @import "../../common/stylus/mixins.styl"
   .containerTop
     width 100%
-    height 86px
+    height 141px
     font-size 13px
     .floatTop
       position fixed
-      top 0
+      top 55px
       z-index 3
       width 100%
       height 86px
@@ -426,47 +487,41 @@
 
 
 
+
+    .topdiv
+       position fixed
+       top 0px
+       left 0px
+       height 55px
+       width 100%
+       background-image url("./images/header.jpg")
+       background-size 100%
+       z-index 9
+       span
+         line-height 55px
+         margin-left 10px
+         z-index 6
+         color gray
+
   .swiper-container
     width 100%
     height 160px
-    position relative
     overflow hidden
     .swiper-wrapper
-      position absolute
-      left 0
-      top 0
       height 100%
       display flex
       flex-direction row
       .swiper-slide
-        float left
         width 375px
         height 100%
         a
          display block
          width 100%
          height 100%
-         bg_icon("./images/slide1.jpg")
-    .swiper-pagination
-      width 50%
-      height 10%
-      position absolute
-      bottom 20px
-      left 25%
-      font-size 13px
-      padding 0 auto
-      .swiper-pagination-bullet
-        display block
-        float left
-        border-radius 50%
-        width 8px
-        height 50%
-        background white
-        margin 4px 10px
-      &>span.swiper-pagination-bullet-active
-        background white
-        width 15px
-        transition .5s
+         img
+           width 100%
+           height  100%
+
   .listNav
     .listContainer
       width 100%
@@ -520,17 +575,18 @@
       width 100%
       .surpriseContainer
           height 130px
+          width 100%
+          overflow hidden
+          position relative
          .surpriseWrapper
            position absolute
-           left 0
-           top 30px
-           overflow hidden
            display flex
            flex-direction row
+           overflow hidden
+           top 0
            li
               width 98.5px
               height 130px
-              float left
              .image
                height 75%
                width 100%
@@ -565,5 +621,22 @@
     .state
        width 5%
        color white
+
+  .allServes
+    .currentServes
+      overflow hidden
+      display flex
+      flex-direction row
+      width 100%
+      img
+        width 100%
+        height 100%
+      .right
+        width 50%
+        img
+          width 100%
+      .state
+        width 5%
+        color white
 
 </style>

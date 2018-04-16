@@ -17,27 +17,33 @@ export default new Router({
     },
     {
       path: '/main',
-      component: Main
+      component: Main,
+      meta:{isfooterShow:true}
     },
     {
       path: '/user',
-      component: User
+      component: User,
+      meta:{isfooterShow:true}
     },
     {
       path: '/register',
-      component: Register
+      component: Register,
+      meta:{isfooterShow:false}
     },
     {
       path: '/login',
-      component: Login
+      component: Login,
+      meta:{isfooterShow:false}
     },
     {
       path: '/category',
-      component: Category
+      component: Category,
+      meta:{isfooterShow:true}
     },
     {
       path: '/cart',
-      component: Cart
+      component: Cart,
+      meta:{isfooterShow:true}
     }
   ]
 })
