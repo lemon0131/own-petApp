@@ -1,19 +1,19 @@
 <template>
   <div class="video">
     <div class="top">
-      <a href="#" class="clickvideo">
-        <img src="./5837d50b4993a5de2aff2b26ce8cf3d5.png" alt="">
+      <a :href="link" class="clickvideo">
+        <img :src="videobg" alt="">
         <span class="iconfont icon-shipin"></span>
       </a>
     </div>
     <div class="bottom">
-      <div class="smalltop">
-        第3期-汪星人你的大姨妈来了吗？
+      <div class="smalltop" style="font-size: 14px;color: #7e8c8d">
+        {{title}}
       </div>
-      <div class="smallfont">
-        <span>123</span>
+      <div class="smallfont" style="font-size: 14px;color: #7e8c8d">
+        <span>{{visit}}</span>
         <span>|</span>
-        <span>123</span>
+        <span>{{time}}</span>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
   export default {
-
+    props:['link','videobg','title','visit','time']
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">

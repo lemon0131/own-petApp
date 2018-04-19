@@ -2,23 +2,23 @@
     <div>
       <header>
         <div class="top">
-          <span style="margin-left: 4px" class="iconfont icon-jiantou4"></span>
+          <span style="margin-left: 4px" class="iconfont icon-jiantou4" @click="$router.back()"></span>
           <span>
-            <a href="###" style="color: white">注册</a>
+            <a href="###" style="color: white" @click="$router.push('/register')">注册</a>
           </span>
         </div>
         <div class="bottom">
-          <div class="right" @click="tomessLogin(false)">
+          <div class="right" @click="tomessLogin(false,$event)">
             <span>
               <a href="#">
                 普通登录
               </a></span>
-            <i class="activeClass"></i>
+            <i :class="{activeClass:type=='userLogin'}"></i>
           </div>
-          <div class="right" @click="tomessLogin(true)">
+          <div class="right" @click="tomessLogin(true,$event)">
             <span>
               <a href="#">手机动态密码登录</a></span>
-            <i class="activeClass"></i>
+            <i :class="{activeClass:type=='messageLogin'}"></i>
           </div>
         </div>
       </header>
@@ -28,11 +28,11 @@
             <ul>
               <li>
                 <span class="iconfont icon-yonghu"></span>
-                <input type="text" placeholder="手机号/邮箱/用户名" name="username" id="username">
+                <input v-model="username" type="text" placeholder="手机号/邮箱/用户名" name="username" id="username">
               </li>
               <li>
                 <span class="iconfont icon-suo"></span>
-                <input type="password" placeholder="输入密码" name="password" id="password">
+                <input v-model="password" type="password" placeholder="输入密码" name="password" id="password">
               </li>
             </ul>
           </form>
@@ -40,7 +40,7 @@
             <span>忘记密码 ?</span>
           </div>
           <div class="loginBtn">
-            <a href="##">
+            <a href="##" @click="Tologin">
               登录
             </a>
           </div>
@@ -60,19 +60,20 @@
             <ul>
               <li style="height: 33.333%">
                 <span class="iconfont icon-iphone"></span>
-                <input type="text" placeholder="已注册的手机号" name="phone" id="bdphone">
+                <input v-model="phoneNum" type="text" placeholder="已注册的手机号" name="phone" id="bdphone">
               </li>
               <li style="height: 33.333%">
                 <span class="iconfont icon-suo"></span>
-                <input  type="password" placeholder="请输入图片内容" name="varify" id="varify">
-                <span style="width:85px;height: 30px;display:block;position: absolute;top:56px;right:0px;">
-                  <img style="width:85px;height: 30px" src="share/seccode.html?hash=5157&height=30&width=85" alt="">
+                <input v-model="varify" type="password" placeholder="请输入图片内容" name="varify" id="varify">
+                <span  style="width:85px;height: 30px;display:block;position: absolute;top:56px;right:0px;">
+                  <img style="width:85px;height: 30px" ref="haha" @click="changepicture" src="http://localhost:3000/captcha" alt="">
+
                 </span>
               </li>
               <li style="height: 33.333%">
                 <span class="iconfont icon-suo"></span>
-                <input  type="password" placeholder="请输入动态密码" name="changePwd" id="changePwd">
-                <a style="width:110px;text-align: center;line-height: 30px;height: 30px;border: 1px red solid;color: red;display:block;position: absolute;top:100px;right:0px;">
+                <input v-model="changePwd"  type="text" placeholder="请输入动态密码" name="changePwd" id="changePwd">
+                <a  @click="loginsms" style="width:110px;text-align: center;line-height: 30px;height: 30px;border: 1px red solid;color: red;display:block;position: absolute;top:100px;right:0px;">
                   获取动态验证码
                </a>
               </li>
@@ -82,7 +83,7 @@
             <span>忘记密码 ?</span>
           </div>
           <div class="loginBtn">
-            <a href="##">
+            <a href="##" @click="Tologin">
               登录
             </a>
           </div>
@@ -103,20 +104,95 @@
 
 <script>
   /* eslint-disable */
+  import {MessageBox} from 'mint-ui';
+  import {mapState} from 'vuex'
+  import {reqmesLogin,requserLogin,reqmes} from '../../api/index'
   export default {
     data(){
       return{
-        type:"userLogin"
+        type:"userLogin",
+        username:'',
+        password:'',
+        varify:null,
+        changePwd:null,
+        phoneNum:''
       }
     },
     methods:{
-      tomessLogin(boolean){
+
+      async Tologin(){
+        let mes='';
+        if(this.type==="userLogin"){
+          let {username,password} =this;
+          if(this.username.trim() && this.password.trim()){
+
+            let result = await requserLogin({name:username,pwd:password});
+            if(result.code===0){
+              this.$store.dispatch("getuserInfo",result.data);
+              this.$router.replace('/user');
+            }else{
+              mes = "用户名或密码输入错误";
+            }
+          }else{
+            mes = "用户名或密码格式不正确";
+          }
+        }else{
+          let {phoneNum,changePwd,varify} =this;
+          if(this.rightNumber && changePwd.trim() && varify.trim()){
+           let result = await reqmesLogin({phone:phoneNum,code:changePwd,captcha:varify})
+           if(result.code===0){
+             this.$store.dispatch("getuserInfo",result.data);
+             this.$router.replace('/user');
+           }else if(result.code===1){
+             mes = result.msg;
+             this.changePwd='';
+             this.phoneNum='';
+             this.varify=''
+           }
+
+         }else{
+            mes="格式输入错误";
+            this.varify=''
+            this.changePwd='';
+            this.phoneNum='';
+         }
+        }
+        if(mes){
+          MessageBox.alert(mes).then(()=>{
+            this.username='';
+            this.password='';
+          })
+        }
+      },
+      tomessLogin(boolean,$event){
+        console.log($event)
         if(boolean){
           this.type="messageLogin";
         }else{
           this.type="userLogin";
         }
+      },
+      loginsms(){
+        let phone=this.phoneNum;
+        reqmes({phone})
+      },
+      changepicture(){
+        this.$refs.haha.src="http://localhost:3000/captcha?name="+Date.now()
       }
+    },
+    computed:{
+      ...mapState(['userInfo']),
+      rightNumber(){
+        return /^1\d{10}$/.test(this.phoneNum)
+      }
+    },
+    mounted(){
+      setTimeout(()=>{
+          if(this.userInfo.name || this.userInfo.phone){
+            this.$router.replace('/user')
+          }
+        },40)
+
     }
   }
 </script>

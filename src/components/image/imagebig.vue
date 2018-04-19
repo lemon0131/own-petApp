@@ -2,13 +2,15 @@
   <div class="current">
     <div class="state"></div>
     <div class="left">
-      <img src="./dog.jpg" alt="">
+      <img :src="image" :alt="image">
     </div>
   </div>
 </template>
 
 <script>
-    export default {}
+    export default {
+      props:['image']
+    }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   .current

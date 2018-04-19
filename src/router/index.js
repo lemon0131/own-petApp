@@ -6,6 +6,7 @@ import Main from '../pages/Main/Main.vue'
 import Login from '../pages/Login/Login.vue'
 import Category from '../pages/Category/Category.vue'
 import Cart from '../pages/Cart/Cart.vue'
+import Allbrand from '../pages/allbrand/Allbrand.vue'
 
 Vue.use(Router)
 
@@ -44,6 +45,9 @@ export default new Router({
       path: '/cart',
       component: Cart,
       meta:{isfooterShow:true}
+    },
+    {path:'/all',component:Allbrand,
+      meta:{isfooterShow:false}
     }
   ]
 })

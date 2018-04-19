@@ -8,7 +8,7 @@
           </span>
           <span>首页</span>
         </li>
-        <li @click="goTo('/category')" :class="{activeColor:$route.path==='/category'}">
+        <li @click="goTo('/category')"  :class="{activeColor:$route.path==='/category'}">
           <span class="item_icon">
             <i class="iconfont icon-sousuoliebiao"></i>
           </span>
@@ -33,9 +33,13 @@
 <script>
   /* eslint-disable */
   export default {
+    props:['reqData'],
     methods:{
       goTo(path){
-        this.$router.replace(path)
+//        if(path==='/category'){
+//          this.reqData(true);
+//        }
+        this.$router.push(path)
       }
     }
   }

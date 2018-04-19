@@ -1,7 +1,7 @@
 <template>
-    <div class="petcla">
+    <div class="petcla" >
       <div class="left">
-        <img src="./im.jpg" alt="">
+        <img :src="img" alt="">
       </div>
       <div class="right">
         <img src="./more.jpg" alt="">
@@ -10,7 +10,9 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+      props:['img']
+    }
 </script>
 
 
